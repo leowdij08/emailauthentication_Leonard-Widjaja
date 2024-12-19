@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/BorrowedItemController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\BorrowedItem; // Model untuk tabel borrowed_items
@@ -43,14 +41,12 @@ class BorrowedItemController extends Controller
         // Mengecek apakah item tersedia
         if ($item->stock <= 0) {
             // Mengarahkan user kembali dengan pesan error jika stok habis
-            $route = $user->role === 'student' ? 'student.dashboard' : 'lecturer.dashboard';
+            $route = $this->getRoleDashboardRoute($user->role);
             return redirect()->route($route)->with('error', 'Item is out of stock.');
         }
 
         // Menghitung tanggal pengembalian berdasarkan peran user
-        $dueDate = $user->role === 'student' 
-            ? Carbon::now()->addDays(5) // 5 hari untuk mahasiswa
-            : Carbon::now()->addDays(3); // 3 hari untuk dosen
+        $dueDate = $this->getDueDateBasedOnRole($user->role);
 
         // Membuat catatan peminjaman di tabel borrowed_items
         BorrowedItem::create([
@@ -65,8 +61,38 @@ class BorrowedItemController extends Controller
         $item->decrement('stock');
 
         // Mengarahkan kembali ke dashboard dengan pesan sukses
-        $route = $user->role === 'student' ? 'student.dashboard' : 'lecturer.dashboard';
+        $route = $this->getRoleDashboardRoute($user->role);
         return redirect()->route($route)->with('success', 'Item borrowed successfully!');
+    }
+
+    // Fungsi untuk menghitung tanggal pengembalian berdasarkan peran user
+    private function getDueDateBasedOnRole($role)
+    {
+        switch ($role) {
+            case 'student':
+                return Carbon::now()->addDays(5); // 5 hari untuk mahasiswa
+            case 'lecturer':
+                return Carbon::now()->addDays(7); // 7 hari untuk dosen
+            case 'general':
+                return Carbon::now()->addDays(3); // 3 hari untuk general
+            default:
+                abort(403, 'Invalid role.');
+        }
+    }
+
+    // Fungsi untuk mendapatkan route dashboard berdasarkan role
+    private function getRoleDashboardRoute($role)
+    {
+        switch ($role) {
+            case 'student':
+                return 'student.dashboard';
+            case 'lecturer':
+                return 'lecturer.dashboard';
+            case 'general':
+                return 'general.dashboard'; // Pastikan route ini ada di file routes
+            default:
+                abort(403, 'Invalid role.');
+        }
     }
 
     // Fungsi untuk melihat riwayat peminjaman

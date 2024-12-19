@@ -38,6 +38,13 @@ Route::middleware(['auth', 'user-access:lecturer'])->group(function () {
     Route::get('/lecturer/home/history', [BorrowedItemController::class, 'history'])->name('borrowed.history.l'); // Riwayat peminjaman
 });
 
+// Route khusus untuk pengguna dengan role 'general'
+Route::middleware(['auth', 'user-access:general'])->group(function () {
+    Route::get('/general/home', [HomeController::class, 'index'])->name('general.dashboard'); // Dashboard umum
+    Route::get('/general/home/borrow/{id}/{category}', [BorrowedItemController::class, 'borrow'])->name('borrowedItems.borrow.g'); // Pinjam item
+    Route::get('/general/home/history', [BorrowedItemController::class, 'history'])->name('borrowed.history.g'); // Riwayat peminjaman
+});
+
 /*------------------------------------------
 --------------------------------------------
 Route untuk admin
@@ -99,4 +106,4 @@ require __DIR__.'/auth.php';
 
 // Komentar untuk menghindari pengaktifan ulang rute tertentu
 // Auth::routes();
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home'); 
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

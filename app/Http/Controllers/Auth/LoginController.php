@@ -61,8 +61,12 @@ class LoginController extends Controller
                 return redirect()->route('librarian.dashboard');
             } else if ($user->role == 'student') {
                 return redirect()->route('student.dashboard');
-            } else {
+            } else if ($user->role == 'lecturer') {
                 return redirect()->route('lecturer.dashboard');
+            } else if ($user->role == 'general') {
+                return redirect()->route('general.dashboard'); // Tambahkan route ini
+            } else {
+                return redirect()->route('home'); // Default jika tidak ada role yang dikenali
             }
         } else {
             return redirect()->route('login')

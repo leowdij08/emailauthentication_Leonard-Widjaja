@@ -43,6 +43,7 @@
                 <option value="admin">{{ __('Admin') }}</option>
                 <option value="student">{{ __('Student') }}</option>
                 <option value="lecturer">{{ __('Lecturer') }}</option>
+                <option value="general">{{ __('General') }}</option>
             </select>
         </div>
 
