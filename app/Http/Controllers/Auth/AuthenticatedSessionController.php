@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan tampilan login
      */
     public function create(): View
     {
@@ -20,36 +20,37 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Menangani permintaan otentikasi pengguna
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $request->authenticate();
+        $request->authenticate(); // Melakukan otentikasi pengguna
 
-        $request->session()->regenerate();
+        $request->session()->regenerate(); // Regenerasi session untuk mencegah session fixation attack
 
+        // Redirect berdasarkan peran pengguna (admin, pustakawan, mahasiswa, atau dosen)
         if (Auth::user()->role == 'admin') {
-            return redirect()->route('admin.dashboard'); // Redirect to admin dashboard
+            return redirect()->route('admin.dashboard');
         } elseif (Auth::user()->role == 'librarian') {
-            return redirect()->route('librarian.dashboard'); // Redirect to librarian dashboard
+            return redirect()->route('librarian.dashboard');
         } elseif (Auth::user()->role == 'student') {
-            return redirect()->route('student.dashboard'); // Redirect to student dashboard (or home)
+            return redirect()->route('student.dashboard');
         } else {
-            return redirect()->route('lecturer.dashboard'); // Redirect to student dashboard (or home)
+            return redirect()->route('lecturer.dashboard');
         }
     }
 
     /**
-     * Destroy an authenticated session.
+     * Hapus sesi otentikasi pengguna yang sudah login
      */
     public function destroy(Request $request): RedirectResponse
     {
-        Auth::guard('web')->logout();
+        Auth::guard('web')->logout(); // Logout pengguna
 
-        $request->session()->invalidate();
+        $request->session()->invalidate(); // Invalidasi sesi
 
-        $request->session()->regenerateToken();
+        $request->session()->regenerateToken(); // Regenerasi token CSRF
 
-        return redirect('/');
+        return redirect('/'); // Redirect ke halaman utama
     }
 }

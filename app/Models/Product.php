@@ -11,14 +11,16 @@ class Product extends Model
 
     /**
      * fillable
+     * 
+     * Daftar atribut yang dapat diisi melalui mass assignment
      *
      * @var array
      */
     protected $fillable = [
-        'image',
-        'title',
-        'description',
-        'price',
-        'stock',
+        'image', // Gambar produk
+        'title', // Judul produk
+        'description', // Deskripsi produk
+        'price', // Harga produk
+        'stock', // Jumlah stok produk
     ];
 }

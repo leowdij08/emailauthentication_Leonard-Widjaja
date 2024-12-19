@@ -16,14 +16,14 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],  // Nama wajib diisi, bertipe string, dan maksimal 255 karakter
             'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id),
+                'required',  // Email wajib diisi
+                'string',    // Email harus berupa string
+                'lowercase', // Email harus dalam huruf kecil
+                'email',     // Harus sesuai format email
+                'max:255',   // Maksimal panjang email adalah 255 karakter
+                Rule::unique(User::class)->ignore($this->user()->id), // Email harus unik, kecuali untuk pengguna yang sedang mengirimkan permintaan ini
             ],
         ];
     }

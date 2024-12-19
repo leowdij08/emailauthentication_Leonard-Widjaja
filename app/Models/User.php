@@ -18,10 +18,10 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role'
+        'name', // Nama pengguna
+        'email', // Email pengguna
+        'password', // Kata sandi pengguna
+        'role' // Peran pengguna (misal: admin, pustakawan, anggota)
     ];
 
     /**
@@ -30,8 +30,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', // Sembunyikan password pengguna
+        'remember_token', // Sembunyikan token untuk "remember me"
     ];
 
     /**
@@ -42,13 +42,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'email_verified_at' => 'datetime', // Memastikan tanggal verifikasi email dikembalikan dalam format datetime
+            'password' => 'hashed', // Meng-hash password secara otomatis
         ];
     }
 
     /**
-     * Interact with the user's first name.
+     * Interact with the user's role.
      *
      * @param  string  $value
      * @return \Illuminate\Database\Eloquent\Casts\Attribute
@@ -56,13 +56,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function role(): Attribute
     {
         return new Attribute(
-            get: fn ($value) => $value, // Return the value as is, assuming it's already a string
+            get: fn ($value) => $value, // Mengembalikan nilai peran pengguna seperti semula (misal string)
         );
     }
 
+    /**
+     * Relasi ke CollectionUpdateRequest yang dimiliki oleh pustakawan
+     */
     public function collectionUpdateRequests()
     {
-        return $this->hasMany(CollectionUpdateRequest::class, 'librarian_id');
+        return $this->hasMany(CollectionUpdateRequest::class, 'librarian_id'); // Menghubungkan pengguna dengan permintaan pembaruan koleksi
     }
-
 }

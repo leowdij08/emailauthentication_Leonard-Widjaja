@@ -7,38 +7,41 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Menjalankan migrasi untuk membuat tabel yang diperlukan.
      */
     public function up(): void
     {
+        // Membuat tabel users
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
+            $table->id();  // ID pengguna
+            $table->string('name');  // Nama pengguna
+            $table->string('email')->unique();  // Email pengguna yang harus unik
+            $table->timestamp('email_verified_at')->nullable();  // Timestamp untuk verifikasi email
+            $table->string('password');  // Password pengguna
+            $table->rememberToken();  // Token untuk mengingat sesi pengguna
+            $table->timestamps();  // Kolom timestamps (created_at, updated_at)
         });
 
+        // Membuat tabel password_reset_tokens
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
-            $table->string('token');
-            $table->timestamp('created_at')->nullable();
+            $table->string('email')->primary();  // Email sebagai primary key
+            $table->string('token');  // Token untuk reset password
+            $table->timestamp('created_at')->nullable();  // Timestamp untuk pembuatan token
         });
 
+        // Membuat tabel sessions
         Schema::create('sessions', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->longText('payload');
-            $table->integer('last_activity')->index();
+            $table->string('id')->primary();  // ID session
+            $table->foreignId('user_id')->nullable()->index();  // ID pengguna (foreign key)
+            $table->string('ip_address', 45)->nullable();  // Alamat IP pengguna
+            $table->text('user_agent')->nullable();  // User agent
+            $table->longText('payload');  // Data payload session
+            $table->integer('last_activity')->index();  // Timestamp untuk aktivitas terakhir
         });
     }
 
     /**
-     * Reverse the migrations.
+     * Membalikkan migrasi dan menghapus tabel.
      */
     public function down(): void
     {

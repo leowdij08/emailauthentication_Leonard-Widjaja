@@ -11,28 +11,32 @@ class CD extends Model
 
     /**
      * fillable
+     * 
+     * Daftar atribut yang dapat diisi melalui mass assignment
      *
      * @var array
      */
     protected $fillable = [
-        'title',
-        'author',
-        'publisher',
-        'description',
-        'price',
-        'stock',
-        'datePublished',
-        'genre',
-        'onlineLink',
-        'catalogue_type'
+        'title', // Judul CD
+        'author', // Penulis atau artis CD
+        'publisher', // Penerbit CD
+        'description', // Deskripsi CD
+        'price', // Harga CD
+        'stock', // Jumlah stok CD
+        'datePublished', // Tanggal terbit CD
+        'genre', // Genre CD
+        'onlineLink', // Link untuk mengakses CD secara online
+        'catalogue_type' // Tipe katalog
     ];
 
-    public $timestamps = false;
-    public $updated_at = false;
+    public $timestamps = false; // Tidak menggunakan timestamp otomatis
+    public $updated_at = false; // Tidak menggunakan updated_at otomatis
 
+    /**
+     * Relasi polymorphic dengan model BorrowedItem
+     */
     public function borrowedItems()
-{
-    return $this->morphMany(BorrowedItem::class, 'borrowable');
-}
-
+    {
+        return $this->morphMany(BorrowedItem::class, 'borrowable'); // Menentukan relasi polymorphic
+    }
 }

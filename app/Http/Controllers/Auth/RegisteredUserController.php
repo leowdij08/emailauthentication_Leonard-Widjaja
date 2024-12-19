@@ -15,7 +15,7 @@ use Illuminate\View\View;
 class RegisteredUserController extends Controller
 {
     /**
-     * Display the registration view.
+     * Menampilkan tampilan registrasi pengguna.
      */
     public function create(): View
     {
@@ -23,12 +23,13 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Handle an incoming registration request.
+     * Menangani permintaan registrasi pengguna.
      *
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
     {
+        // Membuat pengguna baru dan menyimpan data pengguna
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -36,31 +37,34 @@ class RegisteredUserController extends Controller
             'role' => $request->role,
         ]);
 
-    // return redirect(RouteServiceProvider::HOME);
+        // Mengirimkan event bahwa pengguna telah terdaftar
+        event(new Registered($user));
 
+        // Validasi input untuk login setelah registrasi
+        $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
 
-    $request->validate([
-        'email' => ['required', 'email'],
-        'password' => ['required'],
-    ]);
-
-    if (Auth::attempt($request->only('email', 'password'))) {
-        $user = Auth::user();
-        
-        // Custom redirection logic based on user role
-        if ($user->role == 'admin') {
-            return redirect()->route('admin.dashboard');
-        } elseif ($user->role == 'librarian') {
-            return redirect()->route('librarian.dashboard');
-        } elseif ($user->role == 'student') {
-            return redirect()->route('student.dashboard'); // Assuming there's a student dashboard
-        } else {
-            return redirect()->route('lecturer.dashboard'); // Assuming there's a student dashboard
+        // Mencoba untuk login pengguna setelah registrasi
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            
+            // Pengalihan berdasarkan peran pengguna
+            if ($user->role == 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role == 'librarian') {
+                return redirect()->route('librarian.dashboard');
+            } elseif ($user->role == 'student') {
+                return redirect()->route('student.dashboard');
+            } else {
+                return redirect()->route('lecturer.dashboard');
+            }
         }
-    }
 
-    return back()->withErrors([
-        'email' => 'The provided credentials do not match our records.',
-    ]);
+        // Jika login gagal, kembalikan dengan pesan error
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 }

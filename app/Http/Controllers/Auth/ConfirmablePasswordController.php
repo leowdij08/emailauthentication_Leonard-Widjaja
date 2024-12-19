@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class ConfirmablePasswordController extends Controller
 {
     /**
-     * Show the confirm password view.
+     * Tampilkan tampilan konfirmasi password
      */
     public function show(): View
     {
@@ -20,21 +20,21 @@ class ConfirmablePasswordController extends Controller
     }
 
     /**
-     * Confirm the user's password.
+     * Konfirmasi password pengguna
      */
     public function store(Request $request): RedirectResponse
     {
         if (! Auth::guard('web')->validate([
-            'email' => $request->user()->email,
-            'password' => $request->password,
+            'email' => $request->user()->email, // Memastikan email pengguna sesuai
+            'password' => $request->password, // Memastikan password sesuai
         ])) {
             throw ValidationException::withMessages([
-                'password' => __('auth.password'),
+                'password' => __('auth.password'), // Jika password salah, lemparkan pesan error
             ]);
         }
 
-        $request->session()->put('auth.password_confirmed_at', time());
+        $request->session()->put('auth.password_confirmed_at', time()); // Simpan waktu konfirmasi password
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false)); // Redirect ke halaman yang dimaksud
     }
 }

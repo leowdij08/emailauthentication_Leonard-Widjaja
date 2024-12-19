@@ -9,43 +9,39 @@ use App\Models\Journal;
 use App\Models\FinalYearProject;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
-// use App\Models\CollectionUpdateRequest;
 
 class HomeController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
+     * Constructor untuk HomeController.
+     * 
      * @return void
      */
     public function __construct()
     {
+        // Middleware 'auth' memastikan hanya pengguna yang terautentikasi yang dapat mengakses controller ini.
         $this->middleware('auth');
     }
-  
+
     /**
-     * Show the application dashboard.
-     *
+     * Menampilkan halaman dashboard untuk mahasiswa dan dosen.
+     * 
+     * @param Request $request
      * @return \Illuminate\Contracts\Support\Renderable
      */
-  
-    // Show dashboard for both student and lecturer
-    // public function index()
-    // {
-    //     return view('studentlecture.dashboard');
-    // } 
-
     public function index(Request $request)
     {
-        $category = $request->get('category', null); // Default to null if no category is selected
+        // Mengambil kategori yang dipilih dari query string; default ke null jika tidak ada.
+        $category = $request->get('category', null);
 
-        // Fetch the catalog items
+        // Query untuk masing-masing jenis katalog.
         $books = Books::query();
         $newspapers = Newspaper::query();
         $cds = Cd::query();
         $journals = Journal::query();
         $fyp = FinalYearProject::query();
 
+        // Jika kategori dipilih, tambahkan filter kategori ke setiap query.
         if ($category) {
             $books->where('catalogue_type', $category);
             $newspapers->where('catalogue_type', $category);
@@ -54,21 +50,21 @@ class HomeController extends Controller
             $fyp->where('catalogue_type', $category);
         }
 
-        // Get paginated results
+        // Dapatkan hasil yang dipaginasi untuk setiap jenis katalog.
         $books = $books->paginate(10);
         $newspapers = $newspapers->paginate(10);
         $cds = $cds->paginate(10);
         $journals = $journals->paginate(10);
         $fyp = $fyp->paginate(10);
 
-        // Merge paginated items into a single collection
+        // Gabungkan semua item katalog ke dalam satu koleksi.
         $allItems = collect($books->items())
             ->merge($newspapers->items())
             ->merge($cds->items())
             ->merge($journals->items())
             ->merge($fyp->items());
 
-        // Manually paginate the merged collection
+        // Buat pagination manual untuk koleksi gabungan.
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 20;
         $itemsForCurrentPage = $allItems->slice(($currentPage - 1) * $perPage, $perPage)->values();
@@ -81,22 +77,7 @@ class HomeController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
+        // Tampilkan halaman dashboard dengan data yang telah diproses.
         return view('studentlecture.dashboard', compact('paginatedItems', 'category'));
     }
-
-    // Handle the borrowing of a catalog item
-    // public function borrow(Request $request, $id)
-    // {
-    //     // Get the currently authenticated user
-    //     $user = auth()->user();
-
-    //     // Find the catalogue item
-    //     $catalogue = Catalogue::findOrFail($id);
-
-    //     // Handle the borrowing logic (e.g., create a borrowing record)
-    //     // Example: Adding a record to a 'borrowed_items' table
-    //     $user->borrowedItems()->attach($catalogue);  // Assuming there's a many-to-many relationship
-
-    //     return redirect()->route('dashboard')->with('success', 'You have borrowed the item successfully.');
-    // }
 }

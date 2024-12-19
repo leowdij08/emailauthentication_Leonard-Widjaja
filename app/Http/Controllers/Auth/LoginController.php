@@ -8,70 +8,65 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 
-
 class LoginController extends Controller
 {
     /*
-    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------
     | Login Controller
-    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------
     |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
+    | Controller ini menangani otentikasi pengguna dan pengalihan ke halaman
+    | setelah login. Menggunakan trait untuk menyederhanakan fungsionalitasnya.
     |
     */
 
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
+     * Redirect pengguna setelah login
      *
      * @var string
      */
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Membuat instance controller baru
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout'); // Hanya pengguna yang belum login yang dapat mengakses
     }
 
     /**
-     * Create a new controller instance.
-     *
-     * @return RedirectResponse
+     * Menangani login pengguna
      */
     public function login(Request $request): RedirectResponse
     {   
-        $input = $request->all();
+        $input = $request->all(); // Ambil semua input dari request
      
+        // Validasi input login
         $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required',
         ]);
      
-        if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']]))
+        if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) // Coba otentikasi pengguna
         {
-            $user = Auth::user();
+            $user = Auth::user(); // Ambil data pengguna yang sedang login
 
+            // Redirect berdasarkan peran pengguna
             if ($user->role == 'admin') {
                 return redirect()->route('admin.dashboard');
-            }else if ($user->role == 'librarian') {
+            } else if ($user->role == 'librarian') {
                 return redirect()->route('librarian.dashboard');
-            }else if ($user->role == 'student') {
+            } else if ($user->role == 'student') {
                 return redirect()->route('student.dashboard');
             } else {
                 return redirect()->route('lecturer.dashboard');
             }
-        }else{
+        } else {
             return redirect()->route('login')
-                ->with('error','Email-Address And Password Are Wrong.');
+                ->with('error','Email-Address And Password Are Wrong.'); // Tampilkan error jika login gagal
         }
-          
     }
 }

@@ -4,19 +4,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BorrowedItem;
-use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\BorrowedItem; // Model untuk tabel borrowed_items
+use App\Models\User; // Model untuk tabel users
+use Carbon\Carbon; // Library untuk manipulasi tanggal
+use Illuminate\Http\Request; // Untuk menangani permintaan HTTP
 
 class BorrowedItemController extends Controller
 {
+    // Fungsi untuk meminjam item dari katalog
     public function borrow($id, $category)
     {
-        // Get the authenticated user
+        // Mendapatkan user yang sedang login
         $user = auth('web')->user();
 
-        // Find the catalog item based on the category
+        // Menemukan item berdasarkan kategori
         $item = null;
         switch ($category) {
             case 'book':
@@ -35,61 +36,63 @@ class BorrowedItemController extends Controller
                 $item = \App\Models\FinalYearProject::findOrFail($id);
                 break;
             default:
+                // Jika kategori tidak valid, tampilkan halaman 404
                 abort(404, 'Item not found.');
         }
 
-        // Check if the item is available to borrow
+        // Mengecek apakah item tersedia
         if ($item->stock <= 0) {
-            if (auth('web')->user()->role === 'student') {
-                return redirect()->route('student.dashboard')->with('error', 'Item is out of stock.');
-            } elseif (auth('web')->user()->role === 'lecturer') {
-                return redirect()->route('lecturer.dashboard')->with('error', 'Item is out of stock.');
-            }
+            // Mengarahkan user kembali dengan pesan error jika stok habis
+            $route = $user->role === 'student' ? 'student.dashboard' : 'lecturer.dashboard';
+            return redirect()->route($route)->with('error', 'Item is out of stock.');
         }
 
-        // Calculate the due date (based on rules for students or lecturers)
-        $dueDate = Carbon::now()->addDays(5);  // Example: 5 days for students
+        // Menghitung tanggal pengembalian berdasarkan peran user
+        $dueDate = $user->role === 'student' 
+            ? Carbon::now()->addDays(5) // 5 hari untuk mahasiswa
+            : Carbon::now()->addDays(3); // 3 hari untuk dosen
 
-        // Create a borrowed item record
+        // Membuat catatan peminjaman di tabel borrowed_items
         BorrowedItem::create([
-            'borrower_id' => $user->id,
-            'borrowable_id' => $item->id,
-            // 'borrowable_type' => $item->catalogue_type,
-            'borrowable_type' => get_class($item),
-            'borrowed_at' => Carbon::now(),
-            'due_date' => $dueDate = $user->role === 'student' ? Carbon::now()->addDays(5) : Carbon::now()->addDays(3),
+            'borrower_id' => $user->id, // ID user yang meminjam
+            'borrowable_id' => $item->id, // ID item yang dipinjam
+            'borrowable_type' => get_class($item), // Tipe model dari item
+            'borrowed_at' => Carbon::now(), // Tanggal peminjaman
+            'due_date' => $dueDate, // Tanggal pengembalian
         ]);
 
-        // Reduce stock by 1
+        // Mengurangi stok item sebanyak 1
         $item->decrement('stock');
-        if (auth('web')->user()->role === 'student') {
-            return redirect()->route('student.dashboard')->with('success', 'Item borrowed successfully!');
-        } else if (auth('web')->user()->role === 'lecturer') {
-            return redirect()->route('lecturer.dashboard')->with('success', 'Item borrowed successfully!');
-        }
+
+        // Mengarahkan kembali ke dashboard dengan pesan sukses
+        $route = $user->role === 'student' ? 'student.dashboard' : 'lecturer.dashboard';
+        return redirect()->route($route)->with('success', 'Item borrowed successfully!');
     }
 
+    // Fungsi untuk melihat riwayat peminjaman
     public function history()
     {
+        // Mendapatkan user yang sedang login
         $user = auth('web')->user();
 
-        // Fetch borrowed items with their associated catalog model
-        $borrowedItems = BorrowedItem::with('borrowable')
-            ->where('borrower_id', $user->id)
+        // Mengambil data item yang dipinjam beserta model terkait
+        $borrowedItems = BorrowedItem::with('borrowable') // Relasi dengan model item
+            ->where('borrower_id', $user->id) // Hanya item yang dipinjam user ini
             ->get()
             ->map(function ($item) {
                 $today = Carbon::now()->startOfDay();
                 $dueDate = Carbon::parse($item->due_date)->startOfDay();
-                        
-                // Overdue jika hari ini lebih besar dari due date
+
+                // Menandai jika item sudah terlambat dikembalikan
                 $item->is_overdue = $today->greaterThan($dueDate);
-                        
-                // Hitung remaining days (positif jika belum overdue, negatif jika overdue)
+
+                // Menghitung sisa hari (positif jika belum terlambat, negatif jika terlambat)
                 $item->remaining_days = $today->diffInDays($dueDate, false);
-                        
+
                 return $item;
             });
 
+        // Mengembalikan view dengan data borrowed items
         return view('studentlecture.borrowedhistory', compact('borrowedItems'));
     }
 }

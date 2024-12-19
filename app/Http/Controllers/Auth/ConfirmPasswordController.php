@@ -8,32 +8,29 @@ use Illuminate\Foundation\Auth\ConfirmsPasswords;
 class ConfirmPasswordController extends Controller
 {
     /*
-    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------
     | Confirm Password Controller
-    |--------------------------------------------------------------------------
+    |----------------------------------------------------------------------
     |
-    | This controller is responsible for handling password confirmations and
-    | uses a simple trait to include the behavior. You're free to explore
-    | this trait and override any functions that require customization.
+    | Controller ini bertanggung jawab untuk menangani konfirmasi password
+    | dan menggunakan trait untuk menyertakan fungsionalitas tersebut.
     |
     */
 
     use ConfirmsPasswords;
 
     /**
-     * Where to redirect users when the intended url fails.
+     * Redirect pengguna setelah konfirmasi password gagal
      *
      * @var string
      */
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Membuat instance controller baru
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth'); // Pastikan hanya pengguna yang sudah login yang dapat mengakses
     }
 }

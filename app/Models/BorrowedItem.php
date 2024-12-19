@@ -10,21 +10,25 @@ class BorrowedItem extends Model
 
     /**
      * fillable
+     * 
+     * Daftar atribut yang dapat diisi melalui mass assignment
      *
      * @var array
      */
     protected $fillable = [
-        'id',
-        'borrower_id',
-        'borrowable_id',
-        'borrowable_type',
-        'borrowed_at',
-        'due_date'
-
+        'id', // ID dari item yang dipinjam
+        'borrower_id', // ID peminjam
+        'borrowable_id', // ID item yang dipinjam
+        'borrowable_type', // Tipe item (mungkin buku, CD, dll.)
+        'borrowed_at', // Waktu item dipinjam
+        'due_date' // Tanggal pengembalian
     ];
 
+    /**
+     * Relasi polymorphic dengan model lain (misalnya Books, CD, Journal, dsb)
+     */
     public function borrowable()
     {
-        return $this->morphTo();
+        return $this->morphTo(); // Menentukan relasi polymorphic
     }
 }
