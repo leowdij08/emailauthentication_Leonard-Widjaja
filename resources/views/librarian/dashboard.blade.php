@@ -47,6 +47,7 @@
                         </ul>
                     </td>
                     <td>
+                        <!-- Menampilkan status permintaan berdasarkan status -->
                         @if($request->status == 'pending')
                             <span class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="Request is still under review.">Pending</span>
                         @elseif($request->status == 'approved')

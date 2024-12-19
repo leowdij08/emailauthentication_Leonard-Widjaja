@@ -7,7 +7,7 @@
     <form method="POST" action="{{ route('librarian.store') }}">
         @csrf
 
-        <!-- Name Field -->
+        <!-- Field untuk Nama -->
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
@@ -16,7 +16,7 @@
             @enderror
         </div>
 
-        <!-- Email Field -->
+        <!-- Field untuk Email -->
         <div class="mb-3">
             <label for="email" class="form-label">Email Address</label>
             <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required>
@@ -25,7 +25,7 @@
             @enderror
         </div>
 
-        <!-- Password Field -->
+        <!-- Field untuk Password -->
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
@@ -34,13 +34,13 @@
             @enderror
         </div>
 
-        <!-- Confirm Password Field -->
+        <!-- Field untuk Konfirmasi Password -->
         <div class="mb-3">
             <label for="password_confirmation" class="form-label">Confirm Password</label>
             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
         </div>
 
-        <!-- Submit Button -->
+        <!-- Tombol untuk Submit -->
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Create Librarian</button>
         </div>

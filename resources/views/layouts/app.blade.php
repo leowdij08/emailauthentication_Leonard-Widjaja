@@ -4,22 +4,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
+    <!-- CSRF Token untuk keamanan aplikasi -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
+    <!-- Menghubungkan font dari Bunny.net -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Scripts -->
+    <!-- Menggunakan Vite untuk mengelola skrip dan gaya -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
     <div id="app">
+        <!-- Navigasi utama aplikasi -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
+                <!-- Logo aplikasi yang dapat diklik untuk kembali ke halaman utama -->
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
@@ -28,14 +30,12 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+                    <!-- Bagian kiri navbar (kosong untuk saat ini) -->
+                    <ul class="navbar-nav me-auto"></ul>
 
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
+                    <!-- Bagian kanan navbar, untuk login/logout -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
+                        <!-- Tautan untuk login dan registrasi jika pengguna belum login -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -49,11 +49,13 @@
                                 </li>
                             @endif
                         @else
+                            <!-- Menampilkan menu dropdown jika pengguna sudah login -->
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
+                                <!-- Menu dropdown untuk logout -->
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
@@ -72,8 +74,9 @@
             </div>
         </nav>
 
+        <!-- Bagian utama halaman yang akan diisi dengan konten -->
         <main class="py-4">
-            @yield('content')
+            @yield('content') <!-- Konten halaman akan dimasukkan di sini -->
         </main>
     </div>
 </body>

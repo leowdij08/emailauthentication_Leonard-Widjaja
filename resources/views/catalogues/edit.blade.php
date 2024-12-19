@@ -2,11 +2,15 @@
 
 @section('content')
 <div class="container mt-5">
+    <!-- Judul halaman yang disesuaikan dengan kategori -->
     <h1 class="text-center text-primary">Edit {{ ucfirst($category) }}</h1>
+
+    <!-- Form untuk mengedit data katalog -->
     <form action="{{ route('catalogues.update', $item->id) }}" method="POST" class="mt-4">
         @csrf
         @method('PUT')
 
+        <!-- Input untuk judul -->
         <div class="form-group">
             <label for="title">Title:</label>
             <input 
@@ -21,6 +25,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk penulis -->
         <div class="form-group">
             <label for="author">Author:</label>
             <input 
@@ -34,6 +39,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk penerbit -->
         <div class="form-group">
             <label for="publisher">Publisher:</label>
             <input 
@@ -47,6 +53,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk tanggal terbit -->
         <div class="form-group">
             <label for="datePublished">Published Date:</label>
             <input 
@@ -60,6 +67,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk harga -->
         <div class="form-group">
             <label for="price">Price (Rp):</label>
             <input 
@@ -73,6 +81,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk stok -->
         <div class="form-group">
             <label for="stock">Stock:</label>
             <input 
@@ -86,6 +95,7 @@
             @enderror
         </div>
 
+        <!-- Input untuk link online -->
         <div class="form-group">
             <label for="onlineLink">Online Link:</label>
             <input 
@@ -99,9 +109,12 @@
             @enderror
         </div>
 
+        <!-- Menyimpan nilai kategori dalam input tersembunyi -->
         <input type="hidden" name="category" value="{{ $category }}">
 
+        <!-- Tombol untuk menyimpan perubahan -->
         <button type="submit" class="btn btn-success mt-3">Save Changes</button>
+        <!-- Tombol untuk membatalkan dan kembali ke halaman katalog -->
         <a href="{{ route('catalogues.index') }}" class="btn btn-secondary mt-3">Cancel</a>
     </form>
 </div>
