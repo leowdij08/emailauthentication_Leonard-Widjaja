@@ -53,7 +53,7 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:student,lecturer,librarian,admin'],  // Validasi role
+            'role' => ['required', 'in:student,lecturer,librarian,admin,general'],  // Validasi role
         ]);
     }
 
