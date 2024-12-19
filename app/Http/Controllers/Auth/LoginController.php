@@ -64,7 +64,7 @@ class LoginController extends Controller
             } else if ($user->role == 'lecturer') {
                 return redirect()->route('lecturer.dashboard');
             } else if ($user->role == 'general') {
-                return redirect()->route('general.dashboard'); // Tambahkan route ini
+                return redirect()->route('general.dashboard'); 
             } else {
                 return redirect()->route('home'); // Default jika tidak ada role yang dikenali
             }

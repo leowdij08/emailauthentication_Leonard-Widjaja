@@ -78,6 +78,6 @@ class HomeController extends Controller
         );
 
         // Tampilkan halaman dashboard dengan data yang telah diproses.
-        return view('studentlecture.dashboard', compact('paginatedItems', 'category'));
+        return view('studentlecturegeneral.dashboard', compact('paginatedItems', 'category'));
     }
 }

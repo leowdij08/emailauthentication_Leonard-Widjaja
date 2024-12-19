@@ -12,6 +12,8 @@
             <a href="{{ route('borrowed.history.s') }}" class="btn btn-secondary">View Borrowing History</a>
         @elseif (auth()->user()->role == 'lecturer')
             <a href="{{ route('borrowed.history.l') }}" class="btn btn-secondary">View Borrowing History</a>
+        @elseif (auth()->user()->role == 'general')
+            <a href="{{ route('borrowed.history.g') }}" class="btn btn-secondary">View Borrowing History</a>
         @endif
     </div>
 
@@ -60,6 +62,11 @@
                             <a href="{{ route('borrowedItems.borrow.s',  ['id' => $item->id, 'category' => $item->catalogue_type]) }}" class="btn btn-primary">Borrow</a>
                         @elseif (auth()->user()->role == 'lecturer')
                             <a href="{{ route('borrowedItems.borrow.l',  ['id' => $item->id, 'category' => $item->catalogue_type]) }}" class="btn btn-primary">Borrow</a>
+                        @elseif (auth()->user()->role == 'general')
+                            <a href="{{ route('borrowedItems.borrow.g',  ['id' => $item->id, 'category' => $item->catalogue_type]) }}" class="btn btn-primary">Borrow</a>
+                        @else
+                            <span class="text-muted">Not available for your role</span>
+                        @endif
                         @else
                             <span class="text-muted">Not available for your role</span>
                         @endif

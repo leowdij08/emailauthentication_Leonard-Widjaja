@@ -11,7 +11,7 @@ return new class extends Migration
         // Membuat tabel 'borrowed_items' untuk menyimpan data item yang dipinjam
         Schema::create('borrowed_items', function (Blueprint $table) {
             $table->id(); // Menambahkan kolom id sebagai primary key
-            $table->unsignedBigInteger('borrower_id');  // Kolom borrower_id untuk siapa yang meminjam (librarian atau student)
+            $table->unsignedBigInteger('borrower_id');  // Kolom borrower_id untuk siapa yang meminjam (librarian/general/student)
             $table->unsignedBigInteger('borrowable_id');  // Kolom borrowable_id untuk ID item yang dipinjam (misal buku, jurnal, dll.)
             $table->string('borrowable_type');  // Kolom borrowable_type untuk jenis item yang dipinjam (misal Book, Journal, dll.)
             $table->date('borrowed_at');  // Kolom borrowed_at untuk tanggal peminjaman

@@ -89,7 +89,7 @@ class BorrowedItemController extends Controller
             case 'lecturer':
                 return 'lecturer.dashboard';
             case 'general':
-                return 'general.dashboard'; // Pastikan route ini ada di file routes
+                return 'general.dashboard'; 
             default:
                 abort(403, 'Invalid role.');
         }
@@ -119,6 +119,6 @@ class BorrowedItemController extends Controller
             });
 
         // Mengembalikan view dengan data borrowed items
-        return view('studentlecture.borrowedhistory', compact('borrowedItems'));
+        return view('studentlecturegeneral.borrowedhistory', compact('borrowedItems'));
     }
 }

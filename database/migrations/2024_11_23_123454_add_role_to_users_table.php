@@ -10,7 +10,7 @@ return new class extends Migration
     {
         // Menambahkan kolom 'role' pada tabel 'users' untuk menentukan peran pengguna
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'librarian', 'student', 'lecturer'])->default('admin'); // Peran pengguna dapat berupa admin, librarian, student, atau lecturer
+            $table->enum('role', ['admin', 'librarian', 'student', 'lecturer', 'general'])->default('admin'); // Peran pengguna dapat berupa admin, librarian, student, lecturer, dan general
         });
     }
 
