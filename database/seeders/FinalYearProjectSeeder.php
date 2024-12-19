@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 class FinalYearProjectSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Menjalankan database seeder untuk proyek akhir tahun.
      */
     public function run(): void
     {
@@ -63,7 +63,7 @@ class FinalYearProjectSeeder extends Seeder
         foreach ($projects as $project) {
             FinalYearProject::create(array_merge($project, [
                 'project_type' => 'final year project', 
-            ]));
+            ])); // Menambahkan setiap proyek akhir tahun ke database
         }
     }
 }

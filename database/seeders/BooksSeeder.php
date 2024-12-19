@@ -8,7 +8,7 @@ use Illuminate\Database\Seeder;
 class BooksSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Menjalankan database seeder untuk buku.
      */
     public function run(): void
     {
@@ -71,7 +71,7 @@ class BooksSeeder extends Seeder
         ];
 
         foreach ($inventory as $item) {
-            Books::create($item);
+            Books::create($item); // Menambahkan setiap item buku ke database
         }
     }
 }

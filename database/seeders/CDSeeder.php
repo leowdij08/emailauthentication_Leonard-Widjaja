@@ -73,7 +73,7 @@ class CDSeeder extends Seeder
         ];
 
         foreach ($cds as $cd) {
-            CD::create($cd);
+            CD::create($cd); // Menambahkan setiap item CD ke database
         }
     }
 }

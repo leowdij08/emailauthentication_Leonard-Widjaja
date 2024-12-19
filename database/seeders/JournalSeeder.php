@@ -7,8 +7,12 @@ use Illuminate\Database\Seeder;
 
 class JournalSeeder extends Seeder
 {
+    /**
+     * Menjalankan seeder untuk menambahkan data jurnal ke database.
+     */
     public function run(): void
     {
+        // Daftar jurnal yang akan dimasukkan ke dalam database
         $journals = [
             [
                 'title' => 'Journal of Artificial Intelligence Research',
@@ -77,6 +81,7 @@ class JournalSeeder extends Seeder
             ],
         ];
 
+        // Menambahkan setiap jurnal ke dalam database
         foreach ($journals as $journal) {
             Journal::create($journal);
         }

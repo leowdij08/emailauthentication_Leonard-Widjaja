@@ -7,8 +7,12 @@ use Illuminate\Database\Seeder;
 
 class NewspaperSeeder extends Seeder
 {
+    /**
+     * Menjalankan seeder untuk menambahkan data koran ke database.
+     */
     public function run(): void
     {
+        // Daftar koran yang akan dimasukkan ke dalam database
         $newspapers = [
             [
                 'title' => 'Global News Today',
@@ -67,6 +71,7 @@ class NewspaperSeeder extends Seeder
             ],
         ];
 
+        // Menambahkan setiap koran ke dalam database
         foreach ($newspapers as $newspaper) {
             Newspaper::create($newspaper);
         }
