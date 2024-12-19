@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateCollectionUpdateRequestsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('collection_update_requests', function (Blueprint $table) {
@@ -30,9 +27,6 @@ class CreateCollectionUpdateRequestsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('collection_update_requests');
